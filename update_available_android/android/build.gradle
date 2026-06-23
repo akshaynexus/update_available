@@ -2,14 +2,15 @@ group 'me.mateusfccp.update_available_android'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.6.21'
+    ext.kotlin_version = '1.9.22'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.2'
+        // AGP is provided by the consuming app (do NOT pin it here — pinning an
+        // old AGP breaks builds on AGP 9+, which only reads the new DSL).
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -25,7 +26,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 34
+    namespace 'me.mateusfccp.update_available_android'
+    compileSdk 34
 
     compileOptions {
         sourceCompatibility = 17
@@ -36,10 +38,6 @@ android {
         jvmTarget = '17'
     }
 
-    if (project.android.hasProperty("namespace")) {
-        namespace 'me.mateusfccp.update_available_android'
-    }
-
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -48,7 +46,7 @@ android {
         minSdkVersion 21
     }
 
-    lintOptions {
+    lint {
         disable 'InvalidPackage'
     }
 }
